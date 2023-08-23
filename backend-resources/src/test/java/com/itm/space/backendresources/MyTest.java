@@ -61,6 +61,7 @@ public class MyTest extends BaseIntegrationTest {
     @Mock
     private MappingsRepresentation mappingsRepresentation;
     UserRequest userRequest = new UserRequest("Grigory", "123@y.ru", "12345", "Grisha", "Rururu");
+    UserRequest badUserRequest = new UserRequest("G", "123@y.ru", "12345", "Grisha", "Rururu");
 
     @Test
     public void testHelloController() throws Exception {
@@ -81,6 +82,14 @@ public class MyTest extends BaseIntegrationTest {
 
         mvc.perform(requestWithContent(post("/api/users"), userRequest))
                 .andExpect(status().isOk())
+                .andDo(print());
+
+    }
+    @Test
+    public void testCreateBadUser() throws Exception {
+
+        mvc.perform(requestWithContent(post("/api/users"), badUserRequest))
+                .andExpect(status().is4xxClientError())
                 .andDo(print());
 
     }
